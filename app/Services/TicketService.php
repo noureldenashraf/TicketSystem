@@ -13,7 +13,7 @@ class TicketService
         return Ticket::all();
     }
     public function getTicketById ($id) {
-        $ticket = Ticket::query()->findOrFail($id);
+        $ticket = Ticket::with("comments")->findOrFail($id);
         return $ticket;
     }
     public function addTicket(array $data) : Ticket {

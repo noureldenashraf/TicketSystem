@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
-    public function tickets()
+    use HasFactory;
+    public function ticket()
     {
-        return $this->hasOne(Ticket::class);
+        return $this->belongsTo(Ticket::class);
     }
 }

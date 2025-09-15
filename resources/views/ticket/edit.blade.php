@@ -1,20 +1,29 @@
 @extends("main")
 
 @section("body")
+    <div class="w-full max-w-2xl mx-auto bg-white shadow-2xl rounded-2xl p-8">
+        <!-- Title -->
+        <h2 class="text-2xl font-extrabold text-blue-900 mb-6 border-b pb-3">✏️ Update Ticket</h2>
 
-    <h2 style="color:#1E3A8A; font-family:Arial, sans-serif;">Submit a Ticket</h2>
+        <!-- Ticket Update Form -->
+        <form action="{{ route('ticket.update',$ticket->id) }}" method="POST" class="bg-blue-50 border border-blue-200 rounded-xl p-6 shadow-sm space-y-4">
+            @csrf
+            @method('PUT')
 
-    <form action="{{ route('ticket.update',$ticket->id) }}" method="POST" style="background:#EBF4FF; padding:20px; border-radius:10px; width:400px; font-family:Arial, sans-serif; color:#1E3A8A;">
-        @csrf
-        @method('PUT')
-        <label for="ticket_text" style="font-weight:bold;">Ticket Text:</label><br>
-        <textarea id="ticket_text" name="ticket_text" rows="5" cols="40" required
-                  style="width:100%; padding:10px; border:1px solid #3B82F6; border-radius:6px; outline:none; color:#1E3A8A;">{{$ticket->ticket_text}}</textarea><br><br>
+            <!-- Ticket Text -->
+            <div>
+                <label for="ticket_text" class="block text-sm font-semibold text-blue-900 mb-2">Ticket Text</label>
+                <textarea id="ticket_text" name="ticket_text" rows="5" required
+                          class="w-full p-3 border border-blue-400 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none text-blue-900">{{$ticket->ticket_text}}</textarea>
+            </div>
 
-        <button type="submit"
-                style="background:#3B82F6; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">
-            Submit
-        </button>
-    </form>
-
+            <!-- Submit Button -->
+            <div>
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md transition">
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
 @endsection

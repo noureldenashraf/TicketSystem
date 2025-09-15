@@ -20,5 +20,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource("/ticket", TicketController::class)->middleware("auth");
-Route::resource("/comment", CommentController::class);
+//Route::resource("/comment", CommentController::class);
+Route::post("/comment/{ticket_id}",[CommentController::class => "store"]);
 require __DIR__.'/auth.php';

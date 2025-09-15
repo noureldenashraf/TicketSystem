@@ -1,49 +1,77 @@
 @extends("main")
 
 @section("body")
-    <div class="w-full max-w-5xl bg-white shadow-lg rounded-2xl p-6">
-        <h1 class="text-2xl font-bold mb-6 text-gray-800">Tickets</h1>
+    <div class="w-full max-w-6xl mx-auto bg-white shadow-2xl rounded-2xl p-8">
+        <!-- Title -->
+        <h1 class="text-3xl font-extrabold mb-8 text-gray-900 border-b pb-4">🎟️ Ticket Details</h1>
+
         <!-- Tickets Table -->
-        <div class="overflow-x-auto">
+        <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm mb-8">
             <table class="w-full text-left border-collapse">
                 <thead>
-                <tr class="bg-gray-200 text-gray-700">
-                    <th class="p-3">Ticket ID</th>
-                    <th class="p-3">User ID</th>
-                    <th class="p-3">Status</th>
-                    <th class="p-3">Ticket Text</th>
-                    <th class="p-3 text-right">Actions</th>
+                <tr class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
+                    <th class="p-4 font-semibold">Ticket ID</th>
+                    <th class="p-4 font-semibold">User ID</th>
+                    <th class="p-4 font-semibold">Status</th>
+                    <th class="p-4 font-semibold">Ticket Text</th>
+                    <th class="p-4 font-semibold text-right">Actions</th>
                 </tr>
                 </thead>
-                    <tbody>
-                    <tr class="border-b hover:bg-gray-50">
-                        <td class="p-3">{{$ticket->id}}</td>
-                        <td class="p-3">{{$ticket->user_id}}</td>
-                        <td class="p-3">{{$ticket->open}}</td>
-                        <td class="p-3">{{$ticket->ticket_text}}</td>
-                        <td class="p-3 text-right space-x-2">
-                            <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" style="display:inline;">
-                                @csrf
-                                @method('DELETE') <!-- This tells Laravel to treat it as DELETE -->
-                                <button class="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600">Delete</button>
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
+                <tbody>
+                <tr class="border-b hover:bg-gray-50 transition">
+                    <td class="p-4">{{$ticket->id}}</td>
+                    <td class="p-4">{{$ticket->user_id}}</td>
+                    <td class="p-4">
+                            <span class="px-3 py-1 rounded-full text-sm
+                                {{ $ticket->open ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                {{ $ticket->open ? 'Open' : 'Closed' }}
+                            </span>
+                    </td>
+                    <td class="p-4 text-gray-700">{{$ticket->ticket_text}}</td>
+                    <td class="p-4 text-right">
+                        <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" class="inline">
+                            @csrf
+                            @method('DELETE')
+                            <button
+                                class="px-4 py-2 text-sm bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition">
+                                Delete
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
             </table>
         </div>
 
-        <form action="{{ route('comment.store',$ticket->id) }}" method="POST" style="background:#EBF4FF; padding:20px; border-radius:10px; width:400px; font-family:Arial, sans-serif; color:#1E3A8A;">
-            @csrf
-            <label for="ticket_text" style="font-weight:bold;">Ticket Text:</label><br>
-            <textarea id="comment_text" name="comment_text" rows="5" cols="40" required
-                      style="width:100%; padding:10px; border:1px solid #3B82F6; border-radius:6px; outline:none; color:#1E3A8A;"></textarea><br><br>
+        <!-- Add Comment -->
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 shadow-sm">
+            <form action="{{ route('ticket.update',$ticket->id) }}" method="POST" class="space-y-4">
+                @csrf
+                <div>
+                    <label for="comment_text" class="block text-sm font-semibold text-blue-900 mb-2">Add Comment</label>
+                    <textarea id="comment_text" name="comment_text" rows="4" required
+                              class="w-full p-3 border border-blue-400 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none resize-none"></textarea>
+                </div>
+                <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold shadow-md transition">
+                    Submit
+                </button>
+            </form>
+        </div>
 
-            <button type="submit"
-                    style="background:#3B82F6; color:white; padding:10px 20px; border:none; border-radius:6px; cursor:pointer; font-weight:bold;">
-                Submit
-            </button>
-        </form>
-
+        <!-- Comments Section -->
+        <div class="space-y-4">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">💬 Comments</h2>
+            @forelse($ticket->comments as $comment)
+                <div class="bg-gray-50 border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition">
+                    <p class="text-gray-700 mb-2">{{$comment->comment_text}}</p>
+                    <div class="flex justify-between text-sm text-gray-500">
+                        <span>User ID: {{$comment->user_id}}</span>
+                    </div>
+                </div>
+            @empty
+                <p class="text-gray-500 italic">No comments yet.</p>
+            @endforelse
+        </div>
     </div>
 @endsection
