@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\TicketService;
 use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
+    public function __construct (protected TicketService $ticketService){}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return view("ticket.index",["tickets" => $this->ticketService->getAllTickets()]);
     }
 
     /**
@@ -19,7 +21,7 @@ class TicketController extends Controller
      */
     public function create()
     {
-        //
+        return view("ticket.create");
     }
 
     /**
@@ -27,15 +29,23 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->validate(
+            [
+                //"user_id" => "required",
+                "ticket_text" => "required",
+            ]
+        );
+        return view("ticket.show",["ticket" => $this->ticketService->addTicket($data)]);
+
+        // remeber to verify here
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(int $id)
     {
-        //
+        return view("ticket.show",["ticket" => $this->ticketService->getTicketById($id)]);
     }
 
     /**
