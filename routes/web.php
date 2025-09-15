@@ -19,6 +19,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::resource("/ticket", TicketController::class);
+Route::resource("/ticket", TicketController::class)->middleware("auth");
 Route::resource("/comment", CommentController::class);
 require __DIR__.'/auth.php';

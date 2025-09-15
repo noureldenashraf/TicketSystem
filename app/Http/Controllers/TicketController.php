@@ -53,7 +53,7 @@ class TicketController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view("ticket.edit",["ticket" => $this->ticketService->getTicketById($id)]);
     }
 
     /**
@@ -61,7 +61,12 @@ class TicketController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = $request->validate(
+            [
+                //"user_id" => "required",
+                "ticket_text" => "required",
+            ]);
+        return view("ticket.show",["ticket" => $this->ticketService->editTicket($data,$id)]);
     }
 
     /**
@@ -69,6 +74,7 @@ class TicketController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $this->ticketService->deleteTicket($id);
+        return redirect()->route("ticket.index");
     }
 }

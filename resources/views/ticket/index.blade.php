@@ -11,6 +11,7 @@
                     <th class="p-3">ID</th>
                     <th class="p-3">Status</th>
                     <th class="p-3">Created At</th>
+                    <th class="p-3 text-right"></th>
                     <th class="p-3 text-right">Actions</th>
                 </tr>
                 </thead>
@@ -24,8 +25,13 @@
                         <a href="{{ route('ticket.show', $ticket->id) }}">
                             <button class="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600">View</button>
                         </a>
-
-                        <button class="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600">Delete</button>
+                    </td>
+                    <td class="p-3 text-right space-x-2">
+                        <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE') <!-- This tells Laravel to treat it as DELETE -->
+                            <button class="px-3 py-1 text-sm bg-red-500 text-white rounded-lg hover:bg-red-600">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
