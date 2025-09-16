@@ -5,15 +5,25 @@ namespace App\Services;
 use App\Models\Ticket;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class TicketService
 {
     public function getAllTickets()
     {
-        return Ticket::all();
+        // TODO
+        // i believe i can optimize this query later
+
+        if(auth()->user()->role == "admin"){
+            return Ticket::all();
+        }
+        else {
+            return Ticket::query()->where("tickets.user_id",auth()->id())->get();
+        }
+
     }
     public function getTicketById ($id) {
-        $ticket = Ticket::with("comments")->findOrFail($id);
+        $ticket = Ticket::with("comments.user")->findOrFail($id);
         return $ticket;
     }
     public function addTicket(array $data) : Ticket {

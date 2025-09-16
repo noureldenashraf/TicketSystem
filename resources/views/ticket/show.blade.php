@@ -15,6 +15,7 @@
                     <th class="p-4 font-semibold">Status</th>
                     <th class="p-4 font-semibold">Ticket Text</th>
                     <th class="p-4 font-semibold text-right">Actions</th>
+                    <th class="p-4 font-semibold text-right"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -28,6 +29,12 @@
                             </span>
                     </td>
                     <td class="p-4 text-gray-700">{{$ticket->ticket_text}}</td>
+                    <td class="p-4 text-right">
+                    <a href="{{ route('ticket.edit', $ticket->id) }}"
+                       class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+                        Edit
+                    </a>
+                    </td>
                     <td class="p-4 text-right">
                         <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" class="inline">
                             @csrf
@@ -45,7 +52,7 @@
 
         <!-- Add Comment -->
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 shadow-sm">
-            <form action="{{ route('ticket.update',$ticket->id) }}" method="POST" class="space-y-4">
+            <form action="{{ route('ticket.comment',$ticket->id) }}" method="POST" class="space-y-4">
                 @csrf
                 <div>
                     <label for="comment_text" class="block text-sm font-semibold text-blue-900 mb-2">Add Comment</label>
@@ -66,8 +73,15 @@
                 <div class="bg-gray-50 border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition">
                     <p class="text-gray-700 mb-2">{{$comment->comment_text}}</p>
                     <div class="flex justify-between text-sm text-gray-500">
-                        <span>User ID: {{$comment->user_id}}</span>
+                        <span>Name: {{$comment->user->name}}</span>
+                        <span>Date: {{$comment->created_at->format('M d, Y h:i A')}}</span>
+
                     </div>
+                    <div class="flex justify-between text-sm text-gray-500">
+                    <span>{{$comment->user->role}}</span>
+                    <span>{{$comment->created_at->diffForHumans()}}</span>
+                    </div>
+                </div>
                 </div>
             @empty
                 <p class="text-gray-500 italic">No comments yet.</p>

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Services\CommentService;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    public function __construct(protected CommentService $commentService){}
+
     /**
      * Display a listing of the resource.
      */
@@ -26,11 +29,16 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request,$id)
     {
-//
-//        $comment = new Comment();
-//        $comment->fill()
+        $data = $request->validate(
+            [
+                "comment_text" => "required"
+            ]
+        );
+        $this->commentService->addComment($data,$id);
+        return redirect()->route("ticket.show",["ticket"=>$id]);
+
     }
 
     /**

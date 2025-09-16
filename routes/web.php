@@ -6,7 +6,7 @@ use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route("ticket.index");
 });
 
 Route::get('/dashboard', function () {
@@ -21,5 +21,5 @@ Route::middleware('auth')->group(function () {
 
 Route::resource("/ticket", TicketController::class)->middleware("auth");
 //Route::resource("/comment", CommentController::class);
-Route::post("/comment/{ticket_id}",[CommentController::class => "store"]);
+Route::post("/ticket/{id}/comment",[CommentController::class , 'store'])->name("ticket.comment")->middleware(["auth","verified","admin"]);
 require __DIR__.'/auth.php';
