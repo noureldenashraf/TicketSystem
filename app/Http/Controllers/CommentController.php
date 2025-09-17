@@ -29,15 +29,15 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request,$id)
+    public function store(Request $request,$ticket_id)
     {
         $data = $request->validate(
             [
                 "comment_text" => "required"
             ]
         );
-        $this->commentService->addComment($data,$id);
-        return redirect()->route("ticket.show",["ticket"=>$id]);
+        $this->commentService->addComment($data,$ticket_id);
+        return redirect()->route("ticket.show",["ticket"=>$ticket_id]);
 
     }
 
