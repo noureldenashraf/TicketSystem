@@ -14,7 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias(
             [
-                "admin" => App\Http\Middleware\Admin::class
+                "admin" => App\Http\Middleware\Admin::class,
+                "accessTickets" => App\Http\Middleware\accessTickets::class
             ]
         );
     })
