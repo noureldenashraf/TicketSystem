@@ -1,5 +1,4 @@
 @extends("main")
-
 @section("body")
     <div class="w-full max-w-6xl mx-auto bg-white shadow-2xl rounded-2xl p-8">
         <!-- Title -->
