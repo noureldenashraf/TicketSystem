@@ -15,16 +15,26 @@ class TicketService
         // i believe i can optimize this query later
 
         if(auth()->user()->role == "admin"){
-            return Ticket::all();
+            return Ticket::paginate(5);
         }
         else {
-            return Ticket::query()->where("tickets.user_id",auth()->id())->get();
+            return Ticket::query()->where("tickets.user_id",auth()->id())->paginate(5);
         }
 
     }
     public function getTicketById ($id) {
-        $ticket = Ticket::with("comments.user")->findOrFail($id);
-        return $ticket;
+//        $ticket = Ticket::with("comments.user")->findOrFail($id);
+        $ticket = Ticket::query()->findOrFail($id);
+
+        $comments = $ticket->comments()->
+        with("user")->
+        latest()->
+        paginate(2);
+
+        return [
+           "ticket" => $ticket,
+           "comments" => $comments
+        ];
     }
     public function addTicket(array $data) : Ticket {
         $ticket = new Ticket();

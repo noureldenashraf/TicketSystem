@@ -35,7 +35,8 @@ class TicketController extends Controller
                 "ticket_text" => "required",
             ]
         );
-        return view("ticket.show",["ticket" => $this->ticketService->addTicket($data)]);
+        $ticket = $this->ticketService->addTicket($data);
+        return view("ticket.show",$this->ticketService->getTicketById($ticket->id));
 
         // remeber to verify here
     }
@@ -45,7 +46,7 @@ class TicketController extends Controller
      */
     public function show(int $id)
     {
-        return view("ticket.show",["ticket" => $this->ticketService->getTicketById($id)]);
+        return view("ticket.show",$this->ticketService->getTicketById($id));
     }
 
     /**

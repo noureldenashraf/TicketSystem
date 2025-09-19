@@ -69,7 +69,7 @@
         <!-- Comments Section -->
         <div class="space-y-4">
             <h2 class="text-xl font-bold text-gray-800 mb-4">💬 Comments</h2>
-            @forelse($ticket->comments as $comment)
+            @forelse($comments as $comment)
                 <div class="bg-gray-50 border border-gray-200 p-4 rounded-xl shadow-sm hover:shadow-md transition">
                     <p class="text-gray-700 mb-2">{{$comment->comment_text}}</p>
                     <div class="flex justify-between text-sm text-gray-500">
@@ -87,5 +87,7 @@
                 <p class="text-gray-500 italic">No comments yet.</p>
             @endforelse
         </div>
+    <div class="mt-4">
+        {{ $comments->links() }}
     </div>
 @endsection

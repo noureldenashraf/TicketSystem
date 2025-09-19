@@ -48,6 +48,9 @@
                 @endforeach
                 </tbody>
             </table>
+            <div class="mt-4">
+                {{ $tickets->links() }}
+            </div>
         </div>
     </div>
 @endsection

@@ -26,7 +26,7 @@ class accessTickets
             return $next($request);
         }
         else{
-            $ticket = $this->ticketService->getTicketById($request->route("ticket"));
+            $ticket = $this->ticketService->getTicketById($request->route("ticket"))["ticket"];
             if(auth()->id() == $ticket->user_id) {
                 return $next($request);
             }
