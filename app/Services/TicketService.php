@@ -26,7 +26,7 @@ class TicketService
 //        $ticket = Ticket::with("comments.user")->findOrFail($id);
         $ticket = Ticket::query()->findOrFail($id);
 
-        if(auth()->id() == $ticket->user_id) {
+        if(auth()->user()->role == "admin" || auth()->id() == $ticket->user_id) {
             $comments = $ticket->comments()->
             with("user")->
             latest()->

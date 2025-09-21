@@ -54,7 +54,7 @@ class TicketController extends Controller
      */
     public function edit(string $id)
     {
-        return view("ticket.edit",["ticket" => $this->ticketService->getTicketById($id)]);
+        return view("ticket.edit",["ticket" => $this->ticketService->getTicketById($id)]["ticket"]);
     }
 
     /**
@@ -67,7 +67,8 @@ class TicketController extends Controller
                 //"user_id" => "required",
                 "ticket_text" => "required",
             ]);
-        return view("ticket.show",["ticket" => $this->ticketService->editTicket($data,$id)]);
+        $ticket = $this->ticketService->editTicket($data,$id);
+        return view("ticket.show",$this->ticketService->getTicketById($ticket->id));
     }
 
     /**
