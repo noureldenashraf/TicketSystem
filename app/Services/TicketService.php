@@ -56,26 +56,30 @@ class TicketService
     }
     public function editTicket (array $data,$id) {
         $ticket = Ticket::query()->findOrFail($id);
-        $ticket->ticket_text = $data["ticket_text"];
-        try {
-            $ticket->save();
-        }
-        catch (Exception $exception){
-            abort(404);
+        if(auth()->user()->role == "admin" || auth()->id() == $ticket->user_id) {
+            $ticket->ticket_text = $data["ticket_text"];
+            try {
+                $ticket->save();
+            } catch (Exception $exception) {
+                abort(404);
 
+            }
+            return $ticket;
         }
-        return $ticket;
+        abort(401);
 
     }
     public function deleteTicket ($id) {
         $ticket = Ticket::query()->findOrFail($id);
-        try {
-            $ticket->delete();
-        }
-        catch (Exception $exception){
-            abort(404);
+        if(auth()->user()->role == "admin" || auth()->id() == $ticket->user_id) {
+            try {
+                $ticket->delete();
+            } catch (Exception $exception) {
+                abort(404);
 
+            }
         }
+        abort(401);
     }
 
 }
