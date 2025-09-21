@@ -26,15 +26,18 @@ class TicketService
 //        $ticket = Ticket::with("comments.user")->findOrFail($id);
         $ticket = Ticket::query()->findOrFail($id);
 
-        $comments = $ticket->comments()->
-        with("user")->
-        latest()->
-        paginate(2);
+        if(auth()->id() == $ticket->user_id) {
+            $comments = $ticket->comments()->
+            with("user")->
+            latest()->
+            paginate(2);
 
-        return [
-           "ticket" => $ticket,
-           "comments" => $comments
-        ];
+            return [
+                "ticket" => $ticket,
+                "comments" => $comments
+            ];
+        }
+        abort(404);
     }
     public function addTicket(array $data) : Ticket {
         $ticket = new Ticket();

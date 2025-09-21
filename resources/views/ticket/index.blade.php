@@ -14,7 +14,9 @@
                     <th class="p-4 font-semibold">Status</th>
                     <th class="p-4 font-semibold">Created At</th>
                     <th class="p-4 font-semibold text-right">View</th>
+                    @if(auth()->check() && auth()->user()->role == "admin")
                     <th class="p-4 font-semibold text-right">Actions</th>
+                   @endif
                 </tr>
                 </thead>
                 <tbody>
@@ -28,13 +30,14 @@
                             </span>
                         </td>
                         <td class="p-4 text-gray-600">{{$ticket->created_at->format('Y-m-d')}}</td>
-                        <td class="p-4 text-right">
+                        <td class="p-5 text-right">
                             <a href="{{ route('ticket.show', $ticket->id) }}">
                                 <button class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
                                     View
                                 </button>
                             </a>
                         </td>
+                        @if(auth()->check() && auth()->user()->role == "admin")
                         <td class="p-4 text-right">
                             <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" class="inline">
                                 @csrf
@@ -44,6 +47,7 @@
                                 </button>
                             </form>
                         </td>
+                        @endif
                     </tr>
                 @endforeach
                 </tbody>

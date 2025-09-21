@@ -13,7 +13,9 @@
                     <th class="p-4 font-semibold">User ID</th>
                     <th class="p-4 font-semibold">Status</th>
                     <th class="p-4 font-semibold">Ticket Text</th>
+                    @if(auth()->check() && auth()->user()->role == "admin")
                     <th class="p-4 font-semibold text-right">Actions</th>
+                    @endif
                     <th class="p-4 font-semibold text-right"></th>
                 </tr>
                 </thead>
@@ -34,6 +36,7 @@
                         Edit
                     </a>
                     </td>
+                    @if(auth()->check() && auth()->user()->role == "admin")
                     <td class="p-4 text-right">
                         <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" class="inline">
                             @csrf
@@ -44,6 +47,7 @@
                             </button>
                         </form>
                     </td>
+                    @endif
                 </tr>
                 </tbody>
             </table>

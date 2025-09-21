@@ -20,7 +20,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::resource("/ticket", TicketController::class)->middleware("auth");
-Route::get("/ticket/{ticket}",[TicketController::class,"show"])->middleware("auth","accessTickets")->name("ticket.show");
+Route::get("/ticket/{ticket}",[TicketController::class,"show"])->middleware("auth")->name("ticket.show");
 
 Route::post("/ticket/{ticket_id}/comment",[CommentController::class , 'store'])->name("ticket.comment")->middleware(["auth","verified"]);
 require __DIR__.'/auth.php';
