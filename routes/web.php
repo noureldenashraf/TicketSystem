@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
@@ -9,7 +10,7 @@ Route::get('/', function () {
     return redirect()->route("ticket.index");
 });
 Route::patch("/ticket/{ticket_id}",[TicketController::class,"toggle"])->middleware("auth","verified")->name("ticket.toggle");
-Route::get('/dashboard',[\App\Http\Controllers\DashboardController::class , "index"])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard',[DashboardController::class , "index"])->middleware(['auth', 'verified',"admin"])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
