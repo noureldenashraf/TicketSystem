@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect()->route("ticket.index");
 });
-
+Route::patch("/ticket/{ticket_id}",[TicketController::class,"toggle"])->middleware("auth","verified")->name("ticket.toggle");
 Route::get('/dashboard', function () {
-    return redirect()->route("ticket.index");
+    return view("dashboard");
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

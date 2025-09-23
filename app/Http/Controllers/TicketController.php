@@ -79,4 +79,8 @@ class TicketController extends Controller
         $this->ticketService->deleteTicket($id);
         return redirect()->route("ticket.index");
     }
+    public function toggle (string $id) {
+
+        return view("ticket.show",$this->ticketService->toggleTicketStatus($id));
+    }
 }

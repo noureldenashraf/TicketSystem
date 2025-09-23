@@ -14,8 +14,9 @@
                     <th class="p-4 font-semibold">Status</th>
                     <th class="p-4 font-semibold">Ticket Text</th>
                     @if(auth()->check() && auth()->user()->role == "admin")
-                    <th class="p-4 font-semibold text-right">Actions</th>
+                        <th class="p-4 font-semibold text-right">Actions</th>
                     @endif
+                    <th class="p-4 font-semibold text-right"></th>
                     <th class="p-4 font-semibold text-right"></th>
                 </tr>
                 </thead>
@@ -24,34 +25,56 @@
                     <td class="p-4">{{$ticket->id}}</td>
                     <td class="p-4">{{$ticket->user_id}}</td>
                     <td class="p-4">
-                            <span class="px-3 py-1 rounded-full text-sm
-                                {{ $ticket->open ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                {{ $ticket->open ? 'Open' : 'Closed' }}
-                            </span>
+                <span class="px-3 py-1 rounded-full text-sm
+                    {{ $ticket->open ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                    {{ $ticket->open ? 'Open' : 'Closed' }}
+                </span>
                     </td>
                     <td class="p-4 text-gray-700">{{$ticket->ticket_text}}</td>
+
+                    <!-- Edit button -->
                     <td class="p-4 text-right">
-                    <a href="{{ route('ticket.edit', $ticket->id) }}"
-                       class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
-                        Edit
-                    </a>
+                        <a href="{{ route('ticket.edit', $ticket->id) }}"
+                           class="px-4 py-2 text-sm bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition">
+                            Edit
+                        </a>
                     </td>
+
+                    <!-- Switch Status button -->
                     @if(auth()->check() && auth()->user()->role == "admin")
                     <td class="p-4 text-right">
-                        <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" class="inline">
+                        <form action="{{ route('ticket.toggle', $ticket->id) }}" method="POST" class="inline">
                             @csrf
-                            @method('DELETE')
+                            @method('PATCH')
+                            <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                             <button
-                                class="px-4 py-2 text-sm bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition">
-                                Delete
+                                class="px-4 py-2 text-sm
+                               {{ $ticket->open ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-green-500 hover:bg-green-600' }}
+                               text-white rounded-lg shadow-md transition">
+                                {{ $ticket->open ? 'Close Ticket' : 'Reopen Ticket' }}
                             </button>
                         </form>
                     </td>
+                    @endif
+
+                    @if(auth()->check() && auth()->user()->role == "admin")
+                        <!-- Delete button -->
+                        <td class="p-4 text-right">
+                            <form action="{{ route('ticket.destroy', $ticket->id) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    class="px-4 py-2 text-sm bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
                     @endif
                 </tr>
                 </tbody>
             </table>
         </div>
+
 
         <!-- Add Comment -->
         <div class="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8 shadow-sm">

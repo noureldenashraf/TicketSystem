@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class TicketService
 {
+    public function accessTickets(Ticket $ticket) : bool{
+        if(auth()->user()->role == "admin" || auth()->id() == $ticket->user_id){
+            return true;
+        }
+        return false;
+    }
     public function getAllTickets()
     {
         // TODO
@@ -23,10 +29,9 @@ class TicketService
 
     }
     public function getTicketById ($id) {
-//        $ticket = Ticket::with("comments.user")->findOrFail($id);
-        $ticket = Ticket::query()->findOrFail($id);
 
-        if(auth()->user()->role == "admin" || auth()->id() == $ticket->user_id) {
+        $ticket = Ticket::query()->findOrFail($id);
+        if($this->accessTickets($ticket)) {
             $comments = $ticket->comments()->
             with("user")->
             latest()->
@@ -56,7 +61,7 @@ class TicketService
     }
     public function editTicket (array $data,$id) {
         $ticket = Ticket::query()->findOrFail($id);
-        if(auth()->user()->role == "admin" || auth()->id() == $ticket->user_id) {
+        if($this->accessTickets($ticket)) {
             $ticket->ticket_text = $data["ticket_text"];
             try {
                 $ticket->save();
@@ -71,15 +76,34 @@ class TicketService
     }
     public function deleteTicket ($id) {
         $ticket = Ticket::query()->findOrFail($id);
-        if(auth()->user()->role == "admin" || auth()->id() == $ticket->user_id) {
+        if($this->accessTickets($ticket)) {
             try {
                 $ticket->delete();
+                return;
             } catch (Exception $exception) {
                 abort(404);
 
             }
         }
         abort(401);
+    }
+    public function toggleTicketStatus ($id): array
+    {
+       $ticket_data = $this->getTicketById($id);
+       $ticket = $ticket_data["ticket"];
+       $comments = $ticket_data["comments"];
+       if($ticket->open){
+           $ticket->open = false;
+       }
+       else {
+           $ticket->open = true;
+       }
+        $ticket->save();
+        return [
+            "ticket" => $ticket,
+            "comments" => $comments
+        ];
+
     }
 
 }
