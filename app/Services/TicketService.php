@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Ticket;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,13 +20,28 @@ class TicketService
     {
         // TODO
         // i believe i can optimize this query later
+        // return only the needed columns :)
 
         if(auth()->user()->role == "admin"){
-            return Ticket::paginate(5);
+            return Ticket::query()->select("tickets.id","tickets.open","tickets.created_at")->paginate(5);
         }
         else {
-            return Ticket::query()->where("tickets.user_id",auth()->id())->paginate(5);
+            return Ticket::query()->select("tickets.id","tickets.open","tickets.created_at")->where("tickets.user_id",auth()->id())->paginate(5);
         }
+
+    }
+
+    public function getAllTicketsByMonth($month,$year = null) {
+        if($year == null) {
+            $year = Carbon::$year; // in case we don't specify the year we deafult assign current year
+        }
+        $tickets =
+        Ticket::query()
+        ->whereYear("tickets.created_at",$year)
+        ->whereMonth("tickets.created_at",$month)
+        ->paginate(10);
+
+        return $tickets;
 
     }
     public function getTicketById ($id) {
@@ -105,5 +121,10 @@ class TicketService
         ];
 
     }
+
+    public function ticketsCount () {
+        return Ticket::count();
+    }
+
 
 }
