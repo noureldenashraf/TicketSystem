@@ -10,6 +10,6 @@ class DashboardController extends Controller
     public function __construct(protected TicketService $ticketService){}
 
     public function index () {
-        return
+        return view("dashboard",$this->ticketService->ticketsCount());
     }
 }

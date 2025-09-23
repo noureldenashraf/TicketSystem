@@ -23,10 +23,10 @@ class TicketService
         // return only the needed columns :)
 
         if(auth()->user()->role == "admin"){
-            return Ticket::query()->select("tickets.id","tickets.open","tickets.created_at")->paginate(5);
+            return Ticket::query()->select("tickets.id","tickets.open","tickets.created_at")->paginate(10);
         }
         else {
-            return Ticket::query()->select("tickets.id","tickets.open","tickets.created_at")->where("tickets.user_id",auth()->id())->paginate(5);
+            return Ticket::query()->select("tickets.id","tickets.open","tickets.created_at")->where("tickets.user_id",auth()->id())->paginate(10);
         }
 
     }
@@ -37,6 +37,7 @@ class TicketService
         }
         $tickets =
         Ticket::query()
+        ->select("tickets.id","tickets.open","tickets.created_at")
         ->whereYear("tickets.created_at",$year)
         ->whereMonth("tickets.created_at",$month)
         ->paginate(10);
@@ -123,7 +124,20 @@ class TicketService
     }
 
     public function ticketsCount () {
-        return Ticket::count();
+            $openedTickets =Ticket::query()->where("tickets.open", 1)->count();
+            $closedTickets =Ticket::query()->where("tickets.open", 0)->count();
+            $allTicketsThisMonth = Ticket::query()->whereMonth("tickets.created_at",Carbon::now()->month)->count(); //current month
+            $allTicketsLastMonth = Ticket::query()->whereMonth("tickets.created_at",Carbon::now()->month - 1)->count(); // this month is SEP - 1 = AUG cause it's the last month
+            return
+                [
+                    // we return all closed and opened tickets
+                    // also we return all tickets for less complexity in front end part
+                    "openedTickets" => $openedTickets,
+                    "closedTickets" => $closedTickets,
+                    "allTickets" => ($openedTickets + $closedTickets),
+                    "allTicketsLastMonth" => $allTicketsLastMonth,
+                    "allTicketsThisMonth" => $allTicketsThisMonth
+                ];
     }
 
 
