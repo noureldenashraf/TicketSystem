@@ -52,7 +52,7 @@ class TicketService
             $comments = $ticket->comments()->
             with("user")->
             latest()->
-            paginate(2);
+            paginate(4);
 
             return [
                 "ticket" => $ticket,
