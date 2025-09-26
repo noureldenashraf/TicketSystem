@@ -13,7 +13,7 @@
                         <div class="text-xl font-semibold">{{ __("You're logged in!") }}</div>
 
                         <a href="{{route("ticket.index")}}"
-                           class="px-5 py-2 bg-indigo-400 text-white text-sm font-medium rounded-lg shadow hover:bg-indigo-700 transition">
+                           class="px-5 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg shadow hover:bg-indigo-700 transition">
                             All Tickets
                         </a>
                     </div>
